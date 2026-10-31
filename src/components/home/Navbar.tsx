@@ -44,13 +44,13 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden shrink-0 items-center gap-2 lg:flex">
-          <Button className="h-11 rounded-full bg-emerald-600 px-5 font-semibold text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700">
-            <Link href="/login">
-              Login
-            </Link>
+        <Link href={"/login"} className="hidden shrink-0 items-center gap-2 lg:flex">
+          <Button
+            className="h-11 rounded-full bg-emerald-600 px-5 font-semibold text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700"
+          >
+            Login
           </Button>
-        </div>
+        </Link>
 
         {/* Decorative only for now; no menu handler is attached. */}
         <div className="lg:hidden">
