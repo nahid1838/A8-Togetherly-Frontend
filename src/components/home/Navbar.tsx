@@ -76,9 +76,6 @@ export default function Navbar() {
               {item.label}
             </Link>
           ))}
-          <Link href="/login" className="shrink-0 rounded-full bg-emerald-600 px-3.5 py-2 text-xs font-semibold text-white">
-            Join Togetherly
-          </Link>
         </nav>
       </div>
     </header>
