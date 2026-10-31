@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "cn";
+import { authClient } from "@/lib/auth-client";
 
 const benefits = [
   "Discover exciting events happening around you",
@@ -26,6 +27,20 @@ const benefits = [
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const user = Object.fromEntries(formData.entries()) as {email: string, password: string};
+
+    const {data, error} = await authClient.signIn.email({
+      ...user,
+      callbackURL: "/"
+    })
+
+    console.log(data, error)
+  }
 
   return (
     <section className="relative overflow-hidden bg-[#FAFAF9] px-5 py-16 md:px-8 lg:py-24">
@@ -90,7 +105,7 @@ export default function LoginForm() {
             </div>
 
             {/* Form */}
-            <form onSubmit={(e) => e.preventDefault()} className="mt-8 space-y-5">
+            <form onSubmit={handleOnSubmit} className="mt-8 space-y-5">
 
               {/* Email */}
               <div className="space-y-2">
@@ -102,6 +117,7 @@ export default function LoginForm() {
                   <Input
                     id="email"
                     type="email"
+                    name="email"
                     placeholder="you@example.com"
                     required
                     autoComplete="email"
@@ -127,6 +143,7 @@ export default function LoginForm() {
                   <Lock size={18} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-600" />
                   <Input
                     id="password"
+                    name="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     required
