@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "cn";
 import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 const benefits = [
   "Discover exciting events happening around you",
@@ -39,7 +40,19 @@ export default function LoginForm() {
       callbackURL: "/"
     })
 
-    console.log(data, error)
+    if(data) {
+      toast.success("User logedin successfully")
+    }
+
+    if(error) {
+      toast.error(`${error.message}`)
+    }
+  }
+
+  const handleGoogleSignIn = async () => {
+    const data = await authClient.signIn.social({
+      provider: "google"
+    })
   }
 
   return (
@@ -181,7 +194,7 @@ export default function LoginForm() {
               </div>
 
               {/* Google Login */}
-              <Button
+              <Button onClick={handleGoogleSignIn}
                 type="button"
                 variant="outline"
                 size="lg"

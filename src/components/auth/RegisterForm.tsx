@@ -70,6 +70,12 @@ export default function RegisterForm() {
     }
   }
 
+  const handleGoogleSignIn = async () => {
+      const data = await authClient.signIn.social({
+        provider: "google"
+      })
+    }
+
   return (
     <section className="relative overflow-hidden bg-[#FAFAF9] px-5 py-16 md:px-8 lg:py-24">
       {/* Background Decorations */}
@@ -278,7 +284,7 @@ export default function RegisterForm() {
               </div>
 
               {/* Google Signup */}
-              <Button
+              <Button onClick={handleGoogleSignIn}
                 type="button"
                 variant="outline"
                 size="lg"

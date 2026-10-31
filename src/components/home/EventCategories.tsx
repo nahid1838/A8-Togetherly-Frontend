@@ -11,7 +11,7 @@ import {
   BriefcaseBusiness,
 } from "lucide-react";
 
-const categories = [
+export const categories = [
   {
     title: "Technology",
     description: "Explore tech meetups, hackathons and developer events.",
