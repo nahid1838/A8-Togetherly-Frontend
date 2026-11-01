@@ -63,7 +63,7 @@ export default function CreateEventForm() {
     (category) => category.title === eventType
   );
 
-  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -75,6 +75,16 @@ export default function CreateEventForm() {
       location: string;
       date: string;
     };
+
+    console.log(event)
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-event`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(event)
+    })
 
     // The date input's `min` already blocks past dates in the picker —
     // double-check here too so nothing slips through (e.g. autofill),
