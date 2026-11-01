@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -25,6 +26,8 @@ import {
 } from "@/components/ui/select";
 import { cn } from "cn";
 import { categories } from "@/components/home/EventCategories";
+import { authClient, useSession } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const DESCRIPTION_MAX_LENGTH = 500;
 
@@ -34,25 +37,32 @@ const benefits = [
   "Grow a community around what you love",
 ];
 
-/* Local today as YYYY-MM-DD for the date input's `min`.
-   Only called from an effect or an event handler — never during render,
-   which would block prerendering under Next 16's cacheComponents. */
 function getTodayISO() {
   const now = new Date();
   const pad = (value: number) => String(value).padStart(2, "0");
+
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 }
 
 export default function CreateEventForm() {
   const dateInputRef = useRef<HTMLInputElement>(null);
+
   const [eventType, setEventType] = useState("");
   const [description, setDescription] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [thumbnailError, setThumbnailError] = useState(false);
 
-  // Effects never run during prerender, so `new Date()` is safe here;
-  // writing the DOM attribute directly avoids setState-in-effect (lint rule).
-  // Once set, the native picker rejects past dates.
+  const router = useRouter();
+
+  // Get logged-in user
+  const { data: session } = authClient.useSession();
+
+  const user = {
+    name: session?.user.name,
+    imageUrl: session?.user.image,
+    email: session?.user.email,
+  };
+
   useEffect(() => {
     if (dateInputRef.current) {
       dateInputRef.current.min = getTodayISO();
@@ -63,10 +73,19 @@ export default function CreateEventForm() {
     (category) => category.title === eventType
   );
 
-  const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleOnSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
 
+    // Check user authentication
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
     const formData = new FormData(e.currentTarget);
+
     const event = Object.fromEntries(formData.entries()) as {
       title: string;
       description: string;
@@ -76,23 +95,49 @@ export default function CreateEventForm() {
       date: string;
     };
 
-    console.log(event)
+    const eventData = {
+      ...event,
+      userName: session?.user.name,
+      userEmail: session?.user.email,
+      userImageUrl: session?.user.image,
+    };
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-event`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(event)
-    })
-
-    // The date input's `min` already blocks past dates in the picker —
-    // double-check here too so nothing slips through (e.g. autofill),
-    // using a fresh value in case the page was left open past midnight.
+    // Validate date before API request
     if (event.date < getTodayISO()) {
-      // TODO: give your own feedback here, e.g. toast.error("Please pick a future date")
+      console.log("Please select a valid future date");
       return;
     }
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/create-event`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(eventData),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error("Event creation failed:", data);
+        return;
+      }
+
+      console.log("Event created successfully:", data);
+
+      router.push("/upcoming-events");
+      router.refresh();
+
+    } catch (error) {
+      console.error("Something went wrong:", error);
+    }
+
+    // Keep your existing JSX form below this point.
+
 
     // TODO: implement the rest yourself, for example:
     // 1. Validate the fields
