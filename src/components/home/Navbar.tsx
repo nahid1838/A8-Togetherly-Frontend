@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   CalendarCheck,
   CalendarPlus,
   ClipboardList,
   HandHeart,
   LogOut,
-  Menu,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -19,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
+import { useTheme } from "@/components/ThemeProvider";
 
 const navigation = [
   { label: "Home", href: "/" },
@@ -46,6 +49,13 @@ export default function Navbar() {
   const user = session?.user ?? null;
   const [loggingOut, setLoggingOut] = useState(false);
 
+  const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
+
+  // Green pill follows the route currently on screen.
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
+
   const handleLogout = async () => {
     if (loggingOut) return;
     setLoggingOut(true);
@@ -60,27 +70,28 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-emerald-950/10 bg-white/95 shadow-[0_4px_24px_-18px_rgba(15,23,42,0.25)] backdrop-blur-xl">
       <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6 lg:px-8">
         <Link href="/" className="group flex shrink-0 items-center gap-2.5">
-          <span className="relative grid size-11 place-items-center rounded-[17px] bg-emerald-600 text-white shadow-lg shadow-emerald-600/20 transition-transform duration-300 group-hover:-rotate-3">
+          <span className="relative grid size-10 place-items-center rounded-[17px] bg-emerald-600 text-white shadow-lg shadow-emerald-600/20 transition-transform duration-300 group-hover:-rotate-3 sm:size-11">
             <HandHeart className="size-6" strokeWidth={2.1} />
             <span className="absolute -right-1 -top-1 size-3 rounded-full border-2 border-white bg-amber-400" />
           </span>
           <span className="flex flex-col leading-none">
-            <span className="text-[1.45rem] font-extrabold tracking-[-0.055em] text-slate-900">
+            <span className="text-[1.3rem] font-extrabold tracking-[-0.055em] text-slate-900 sm:text-[1.45rem]">
               Togetherly<span className="text-emerald-600">.</span>
             </span>
-            <span className="mt-1.5 text-[9px] font-bold tracking-[0.19em] text-slate-500">
+            <span className="mt-1.5 hidden text-[9px] font-bold tracking-[0.19em] text-slate-500 sm:block">
               SMALL ACTS. BIG IMPACT.
             </span>
           </span>
         </Link>
 
         <nav aria-label="Main navigation" className="hidden items-center gap-1 lg:flex">
-          {navigation.map((item, index) => (
+          {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
+              aria-current={isActive(item.href) ? "page" : undefined}
               className={`rounded-full px-4 py-2.5 text-sm font-semibold transition-colors ${
-                index === 0
+                isActive(item.href)
                   ? "bg-emerald-50 text-emerald-800"
                   : "text-slate-600 hover:bg-slate-50 hover:text-emerald-700"
               }`}
@@ -91,6 +102,26 @@ export default function Navbar() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
+          {/* Theme toggle — stays visible on every screen size */}
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={toggleTheme}
+            aria-label={
+              theme === "dark"
+                ? "Switch to light theme"
+                : "Switch to dark theme"
+            }
+            title={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+            className="size-9 rounded-full border-slate-200 text-slate-600 transition-colors hover:border-emerald-300 hover:text-emerald-600 sm:size-10 lg:size-11"
+          >
+            {theme === "dark" ? (
+              <Sun className="size-[18px]" />
+            ) : (
+              <Moon className="size-[18px]" />
+            )}
+          </Button>
+
           {isPending ? (
             /* Session still loading — placeholder avoids a Login → Avatar flash */
             <span
@@ -161,6 +192,20 @@ export default function Navbar() {
                         {label}
                       </DropdownMenuItem>
                     ))}
+
+                    <div className="my-1.5 h-px bg-slate-100" />
+
+                    {/* Mobile: logout lives here (desktop keeps the navbar button) */}
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      disabled={loggingOut}
+                      className="cursor-pointer gap-3 rounded-xl px-3 py-2.5 font-medium text-red-600 focus:bg-red-50 focus:text-red-600 lg:hidden"
+                    >
+                      <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-red-50 text-red-600">
+                        <LogOut className="size-4" />
+                      </span>
+                      {loggingOut ? "Logging out…" : "Logout"}
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
 
@@ -175,38 +220,31 @@ export default function Navbar() {
                 </span>
               </div>
 
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={handleLogout}
-                disabled={loggingOut}
-                aria-label="Logout"
-                className="h-10 rounded-full border-slate-200 px-3 text-slate-700 hover:border-red-200 hover:bg-red-50 hover:text-red-600 disabled:opacity-60 lg:h-11 lg:px-4"
-              >
-                <LogOut className="size-4" />
-                <span className="hidden font-semibold lg:inline">
-                  {loggingOut ? "Logging out…" : "Logout"}
-                </span>
-              </Button>
+              {/* Desktop only — on mobile Logout lives inside the dropdown below */}
+              <div className="hidden lg:block">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={handleLogout}
+                  disabled={loggingOut}
+                  aria-label="Logout"
+                  className="h-10 rounded-full border-slate-200 px-3 text-slate-700 hover:border-red-200 hover:bg-red-50 hover:text-red-600 disabled:opacity-60 lg:h-11 lg:px-4"
+                >
+                  <LogOut className="size-4" />
+                  <span className="hidden font-semibold lg:inline">
+                    {loggingOut ? "Logging out…" : "Logout"}
+                  </span>
+                </Button>
+              </div>
             </>
           ) : (
             <Button
               render={<Link href="/login" />}
               nativeButton={false}
-              className="h-10 rounded-full bg-emerald-600 px-4 text-sm font-semibold text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 lg:h-11 lg:px-5"
+              className="h-10 rounded-full bg-emerald-600 px-3.5 text-sm font-semibold text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 sm:px-4 lg:h-11 lg:px-5"
             >
               Login
             </Button>
-          )}
-
-          {/* Decorative only for now; no menu handler is attached. Hidden while
-              logged in — the avatar + logout cluster already fills the mobile bar. */}
-          {!isPending && !user && (
-            <div className="lg:hidden">
-              <Button variant="outline" size="icon" aria-label="Menu" className="size-10 rounded-xl border-slate-200 bg-white text-slate-700">
-                <Menu className="size-5" />
-              </Button>
-            </div>
           )}
         </div>
       </div>
@@ -216,12 +254,15 @@ export default function Navbar() {
           aria-label="Mobile navigation"
           className="mx-auto flex max-w-7xl items-center gap-1 overflow-x-auto px-4 py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-6"
         >
-          {navigation.map((item, index) => (
+          {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`shrink-0 rounded-full px-3.5 py-2 text-xs font-semibold ${
-                index === 0 ? "bg-emerald-50 text-emerald-800" : "text-slate-600 hover:bg-slate-50"
+              aria-current={isActive(item.href) ? "page" : undefined}
+              className={`shrink-0 rounded-full px-3.5 py-2 text-xs font-semibold transition-colors ${
+                isActive(item.href)
+                  ? "bg-emerald-50 text-emerald-800"
+                  : "text-slate-600 hover:bg-slate-50"
               }`}
             >
               {item.label}

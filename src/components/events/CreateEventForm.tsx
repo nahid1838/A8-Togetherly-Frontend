@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "cn";
 import { categories } from "@/components/home/EventCategories";
-import { authClient, useSession } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
 const DESCRIPTION_MAX_LENGTH = 500;
@@ -135,16 +135,6 @@ export default function CreateEventForm() {
     } catch (error) {
       console.error("Something went wrong:", error);
     }
-
-    // Keep your existing JSX form below this point.
-
-
-    // TODO: implement the rest yourself, for example:
-    // 1. Validate the fields
-    // 2. POST the event to your API / MongoDB
-    // 3. toast.success("Event created!")
-    // 4. router.push("/manage-events")
-    console.log("New event:", event);
   };
 
   return (

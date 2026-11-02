@@ -1,3 +1,10 @@
+export type TEventJoin = {
+    _id: string;
+    userEmail: string;
+    userName: string;
+    userImageUrl: string;
+};
+
 export type TEvent = {
     _id: string;
     title: string;

@@ -4,11 +4,11 @@ import { useState } from "react";
 import { TEvent } from "@/type/eventType";
 import Link from "next/link";
 import EditEventDialog from "@/components/events/EditEventDialog";
+import DeleteEventDialog from "@/components/events/DeleteEventDialog";
 import {
     CalendarDays,
     MapPin,
     Eye,
-    Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -126,15 +126,7 @@ const ManageUserEventCard = ({
 
                 <EditEventDialog userEvent={userEvent} />
 
-                {/* TODO: add your own delete handler to this button (confirm, call your API, refresh the list) */}
-                <Button
-                    size="icon"
-                    variant="outline"
-                    title="Delete Event"
-                    className="size-9 shrink-0 border-red-200 text-red-500 hover:border-red-300 hover:bg-red-50 hover:text-red-600"
-                >
-                    <Trash2 size={16} />
-                </Button>
+                <DeleteEventDialog userEvent={userEvent} />
 
             </CardFooter>
         </Card>

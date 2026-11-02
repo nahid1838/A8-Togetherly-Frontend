@@ -128,3 +128,187 @@
     @apply font-sans;
   }
 }
+
+/* ============================== DARK THEME ==============================
+   The site styles itself with hardcoded utility colors (bg-white,
+   text-slate-900, bg-[#FAFAF9], ...) rather than semantic tokens, so dark
+   mode is applied here in one place by remapping those utilities under
+   .dark instead of sprinkling dark: variants through every component.
+   Toggled by the navbar theme button; light is the default.
+
+   Left alone on purpose: text-white + bg-white/5|10|15|20 (frosted pieces
+   on emerald gradients), bg-slate-900 (tooltips), gradients, and emerald
+   text that sits on gradients (text-emerald-50/100/200/300). */
+
+/* --- Surfaces --- */
+.dark .bg-\[\#FAFAF9\] {
+  background-color: #0f172a;
+}
+.dark .bg-white {
+  background-color: #1e293b;
+}
+.dark .bg-white\/95 {
+  background-color: rgb(15 23 42 / 0.92);
+}
+.dark .hover\:bg-white:hover,
+.dark .group:hover .group-hover\:bg-white {
+  background-color: #26344c;
+}
+.dark .bg-slate-50,
+.dark .bg-slate-50\/60,
+.dark .bg-slate-50\/70,
+.dark .bg-slate-50\/80 {
+  background-color: #151e30;
+}
+.dark .bg-slate-100 {
+  background-color: #24324a;
+}
+.dark .hover\:bg-slate-50:hover {
+  background-color: #1a2438;
+}
+.dark .hover\:bg-slate-100:hover,
+.dark .hover\:bg-slate-200:hover {
+  background-color: #2c3b56;
+}
+
+/* --- Borders & dividers --- */
+.dark .border-slate-100,
+.dark .border-gray-100 {
+  border-color: rgb(255 255 255 / 0.08);
+}
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-slate-100 > :not(:last-child) {
+  border-color: rgb(255 255 255 / 0.08);
+}
+.dark .border-slate-200,
+.dark .border-slate-300 {
+  border-color: rgb(255 255 255 / 0.14);
+}
+.dark .hover\:border-slate-300:hover {
+  border-color: rgb(255 255 255 / 0.24);
+}
+.dark .border-emerald-50,
+.dark .border-emerald-100,
+.dark .border-emerald-200,
+.dark .border-emerald-200\/60 {
+  border-color: rgb(52 211 153 / 0.32);
+}
+.dark .hover\:border-emerald-200:hover,
+.dark .hover\:border-emerald-300:hover {
+  border-color: rgb(52 211 153 / 0.45);
+}
+.dark .border-red-200 {
+  border-color: rgb(248 113 113 / 0.35);
+}
+.dark .hover\:border-red-200:hover,
+.dark .hover\:border-red-300:hover {
+  border-color: rgb(248 113 113 / 0.5);
+}
+
+/* --- Light accent tints -> dark accent tints --- */
+.dark .bg-emerald-50,
+.dark .bg-emerald-50\/30,
+.dark .bg-emerald-50\/40,
+.dark .hover\:bg-emerald-50:hover,
+.dark .focus\:bg-emerald-50:focus {
+  background-color: rgb(5 150 105 / 0.16);
+}
+.dark .bg-emerald-100,
+.dark .bg-emerald-100\/40,
+.dark .bg-emerald-100\/50,
+.dark .hover\:bg-emerald-100:hover {
+  background-color: rgb(5 150 105 / 0.28);
+}
+.dark .bg-orange-50 {
+  background-color: rgb(234 88 12 / 0.18);
+}
+.dark .bg-orange-100,
+.dark .bg-orange-100\/30,
+.dark .bg-orange-100\/40 {
+  background-color: rgb(234 88 12 / 0.3);
+}
+.dark .bg-blue-50 {
+  background-color: rgb(37 99 235 / 0.25);
+}
+.dark .bg-amber-50 {
+  background-color: rgb(245 158 11 / 0.16);
+}
+.dark .bg-red-50,
+.dark .hover\:bg-red-50:hover {
+  background-color: rgb(220 38 38 / 0.18);
+}
+
+/* --- Slate / gray text -> light ramp (keeps the hierarchy) --- */
+.dark .text-slate-900 {
+  color: #f8fafc;
+}
+.dark .text-slate-800,
+.dark .hover\:text-slate-800:hover {
+  color: #f1f5f9;
+}
+.dark .text-slate-700 {
+  color: #e2e8f0;
+}
+.dark .text-slate-600 {
+  color: #cbd5e1;
+}
+.dark .hover\:text-slate-600:hover {
+  color: #f1f5f9;
+}
+.dark .text-slate-500 {
+  color: rgb(255 255 255 / 0.58);
+}
+.dark .text-gray-900 {
+  color: #f8fafc;
+}
+.dark .text-gray-800 {
+  color: #f1f5f9;
+}
+.dark .text-gray-700 {
+  color: rgb(255 255 255 / 0.84);
+}
+.dark .text-gray-500 {
+  color: rgb(255 255 255 / 0.58);
+}
+
+/* --- Accent text brightened for dark surfaces --- */
+.dark .text-emerald-600 {
+  color: #34d399;
+}
+.dark .hover\:text-emerald-600:hover {
+  color: #6ee7b7;
+}
+.dark .group:hover .group-hover\:text-emerald-600 {
+  color: #34d399;
+}
+.dark .text-emerald-700 {
+  color: #6ee7b7;
+}
+.dark .hover\:text-emerald-700:hover {
+  color: #a7f3d0;
+}
+.dark .group:hover .group-hover\:text-emerald-700 {
+  color: #6ee7b7;
+}
+.dark .text-emerald-800,
+.dark .focus\:text-emerald-800:focus {
+  color: #a7f3d0;
+}
+.dark .hover\:text-emerald-800:hover {
+  color: #d1fae5;
+}
+.dark .text-blue-600 {
+  color: #60a5fa;
+}
+.dark .text-orange-600 {
+  color: #fb923c;
+}
+.dark .text-amber-600 {
+  color: #fbbf24;
+}
+.dark .text-red-600 {
+  color: #f87171;
+}
+.dark .hover\:text-red-600:hover {
+  color: #fca5a5;
+}

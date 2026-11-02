@@ -1,7 +1,6 @@
-
-import { Suspense } from "react";
+import { TEvent, TEventJoin } from "@/type/eventType";
 import { notFound } from "next/navigation";
-import { TEvent } from "@/type/eventType";
+import { Suspense } from "react";
 import EventDetailsClient from "@/components/events/EventDetailsClient";
 
 type Props = {
@@ -26,14 +25,36 @@ async function getEvent(id: string): Promise<TEvent | null> {
     }
 }
 
+async function getEventJoins(id: string): Promise<TEventJoin[]> {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/joined-events/event/${id}`,
+            {
+                cache: "no-store",
+            }
+        );
+
+        if (!res.ok) return [];
+
+        const joins = await res.json();
+        return Array.isArray(joins) ? joins : [];
+    } catch (error) {
+        console.error("Failed to fetch event joins:", error);
+        return [];
+    }
+}
+
 async function EventDetailsContent({ id }: { id: string }) {
-    const event = await getEvent(id);
+    const [event, joins] = await Promise.all([
+        getEvent(id),
+        getEventJoins(id),
+    ]);
 
     if (!event) {
         notFound();
     }
 
-    return <EventDetailsClient event={event} />;
+    return <EventDetailsClient event={event} initialJoins={joins} />;
 }
 
 export default async function EventDetailsPage({ params }: Props) {
