@@ -1,12 +1,13 @@
+"use client";
 
+import { useState } from "react";
 import { TEvent } from "@/type/eventType";
-import Image from "next/image";
 import Link from "next/link";
+import EditEventDialog from "@/components/events/EditEventDialog";
 import {
     CalendarDays,
     MapPin,
     Eye,
-    Pencil,
     Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,23 +18,47 @@ import {
     CardFooter,
 } from "@/components/ui/card";
 
+const MONTHS = [
+    "January", "February", "March", "April",
+    "May", "June", "July", "August",
+    "September", "October", "November", "December",
+];
+
+/* Parse YYYY-MM-DD manually so the displayed date never shifts across
+   timezones — unlike new Date().toLocaleDateString(), which can render
+   the previous day in negative UTC offsets. */
+function formatEventDate(date: string) {
+    const [year, month, day] = date.split("-").map(Number);
+    if (!year || !month || !day) return date;
+    return `${MONTHS[month - 1]} ${day}, ${year}`;
+}
+
 const ManageUserEventCard = ({
     userEvent,
 }: {
     userEvent: TEvent;
 }) => {
+    const [imageFailed, setImageFailed] = useState(false);
+
     return (
-        <Card className="group overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+        <Card className="group overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-900/5">
 
             {/* Event Thumbnail */}
             <div className="relative h-48 w-full overflow-hidden sm:h-52">
-                <Image
-                    src={userEvent.thumbnail}
-                    alt={userEvent.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                {imageFailed ? (
+                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-emerald-500 to-emerald-700">
+                        <CalendarDays size={44} strokeWidth={1.5} className="text-white/75" />
+                    </div>
+                ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                        src={userEvent.thumbnail}
+                        alt={userEvent.title}
+                        loading="lazy"
+                        onError={() => setImageFailed(true)}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                )}
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
@@ -65,14 +90,7 @@ const ManageUserEventCard = ({
                         <div className="min-w-0">
                             <p className="text-xs text-gray-400">Event Date</p>
                             <p className="truncate text-sm font-medium text-gray-700">
-                                {new Date(userEvent.date).toLocaleDateString(
-                                    "en-US",
-                                    {
-                                        day: "numeric",
-                                        month: "long",
-                                        year: "numeric",
-                                    }
-                                )}
+                                {formatEventDate(userEvent.date)}
                             </p>
                         </div>
                     </div>
@@ -97,26 +115,18 @@ const ManageUserEventCard = ({
             <CardFooter className="flex flex-wrap gap-2 border-t border-emerald-50 bg-emerald-50/30 p-4">
 
                 <Button
+                    render={<Link href={`/upcoming-events/${userEvent._id}`} />}
+                    nativeButton={false}
                     size="sm"
                     className="h-9 flex-1 bg-emerald-600 text-white hover:bg-emerald-700"
                 >
-                    <Link href={`/events/${userEvent._id}`}>
-                        <Eye size={16} />
-                        View Details
-                    </Link>
+                    <Eye size={16} />
+                    View Details
                 </Button>
 
-                <Button
-                    size="sm"
-                    variant="outline"
-                    className="h-9 flex-1 border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
-                >
-                    <Link href={`/edit-event/${userEvent._id}`}>
-                        <Pencil size={15} />
-                        Edit
-                    </Link>
-                </Button>
+                <EditEventDialog userEvent={userEvent} />
 
+                {/* TODO: add your own delete handler to this button (confirm, call your API, refresh the list) */}
                 <Button
                     size="icon"
                     variant="outline"

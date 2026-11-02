@@ -16,7 +16,7 @@ const ManageEventsPage = async () => {
     const user = session?.user;
 
     const res = await fetch(
-        `http://localhost:5000/event/${user?.email}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/event/${user?.email}`,
         { cache: "no-store" }
     );
 
@@ -62,13 +62,13 @@ const ManageEventsPage = async () => {
                     {/* Create Event Button */}
                     <div className="shrink-0">
                         <Button
+                            render={<Link href="/create-event" />}
+                            nativeButton={false}
                             size="lg"
                             className="h-12 w-full rounded-xl bg-white px-6 font-semibold text-emerald-700 shadow-md transition-all hover:bg-emerald-50 hover:shadow-lg sm:w-auto"
                         >
-                            <Link href="/create-event">
-                                <Plus size={19} />
-                                Create New Event
-                            </Link>
+                            <Plus size={19} />
+                            Create New Event
                         </Button>
                     </div>
 
@@ -132,18 +132,18 @@ const ManageEventsPage = async () => {
                         </h3>
 
                         <p className="mt-2 max-w-md text-sm leading-6 text-gray-500">
-                            You haven't created any events yet.
+                            You haven&apos;t created any events yet.
                             Start something meaningful, invite people,
                             and build stronger connections with Togetherly.
                         </p>
 
                         <Button
+                            render={<Link href="/create-event" />}
+                            nativeButton={false}
                             className="mt-6 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700"
                         >
-                            <Link href="/create-event">
-                                <Plus size={18} />
-                                Create Your First Event
-                            </Link>
+                            <Plus size={18} />
+                            Create Your First Event
                         </Button>
 
                     </div>
