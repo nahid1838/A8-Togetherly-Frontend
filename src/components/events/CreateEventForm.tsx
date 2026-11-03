@@ -29,6 +29,7 @@ import { categories } from "@/components/home/EventCategories";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 const DESCRIPTION_MAX_LENGTH = 500;
 
@@ -98,6 +99,8 @@ export default function CreateEventForm() {
       console.log("Please select a valid future date");
       return;
     }
+    
+    const token = await getTokenFromClient();
 
     try {
       const res = await fetch(
@@ -106,6 +109,7 @@ export default function CreateEventForm() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`
           },
           body: JSON.stringify(eventData),
         }
@@ -123,7 +127,7 @@ export default function CreateEventForm() {
       toast.success("Event created successfully")
 
     } catch (error) {
-      toast.error(`${error}`);
+      console.error("Something went wrong:", error);
     }
   };
 

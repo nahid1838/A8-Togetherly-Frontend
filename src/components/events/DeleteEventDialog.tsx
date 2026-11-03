@@ -15,6 +15,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { TEvent } from "@/type/eventType";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 function DeleteEventDialog({ userEvent }: { userEvent: TEvent }) {
     const router = useRouter();
@@ -24,10 +25,17 @@ function DeleteEventDialog({ userEvent }: { userEvent: TEvent }) {
     const handleDelete = async () => {
         setIsDeleting(true);
 
+        const token = await getTokenFromClient();
+
         try {
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_API_URL}/events/${userEvent._id}`,
-                { method: "DELETE" }
+                { 
+                    method: "DELETE",
+                    headers: {
+                        authorization: `Bearer ${token}`
+                    } 
+                }
             );
 
             if (!res.ok) {

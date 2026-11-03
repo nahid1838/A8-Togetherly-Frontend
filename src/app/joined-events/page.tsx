@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, CalendarCheck, Sparkles } from "lucide-react";
 import EventCard from "@/components/events/EventCard";
 import { TEvent } from "@/type/eventType";
+import { getTokenFromServer } from "@/lib/getTokenFromServer";
 
 type TJoinedEvent = {
     _id: string;
@@ -30,9 +31,15 @@ const JoinedEventsPage = async () => {
 
     const user = session?.user;
 
+    const token = await getTokenFromServer();
+
     const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/joined-events/${user?.email}`,
-        { cache: "no-store" }
+        `${process.env.NEXT_PUBLIC_API_URL}/joined-events/${user?.email}`, {
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
+            cache: 'no-store'
+        }
     );
 
     if (!res.ok) {

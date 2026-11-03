@@ -34,6 +34,7 @@ import { categories } from "@/components/home/EventCategories";
 import { TEvent } from "@/type/eventType";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 function EditEventDialog({ userEvent }: { userEvent: TEvent }) {
     const [open, setOpen] = useState(false);
@@ -63,12 +64,17 @@ const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         date: string;
     };
 
+    const token = await getTokenFromClient();
+
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/events/${userEvent._id}`,
             {
                 method: "PATCH",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    authorization: `Bearer ${token}`
+                },
                 body: JSON.stringify(updates),
             }
         );
