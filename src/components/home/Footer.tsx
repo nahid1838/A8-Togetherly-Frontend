@@ -6,7 +6,6 @@ import {
     Heart,
     Mail,
     MapPin,
-    Sparkles,
 } from "lucide-react";
 import {
     FaFacebookF,
@@ -20,7 +19,7 @@ const footerLinks = {
         { name: "Home", href: "/" },
         { name: "Explore Events", href: "/events" },
         { name: "Create Event", href: "/create-event" },
-        { name: "Categories", href: "/categories" },
+        { name: "Manage Events", href: "/manage-events" },
     ],
     resources: [
         { name: "About Us", href: "/about" },
@@ -44,37 +43,40 @@ const socialLinks = [
 
 export default function Footer() {
     return (
-        <footer className="relative overflow-hidden bg-[#064E3B] text-white">
+        <footer className="bg-slate-100 text-slate-700 dark:bg-slate-900 dark:text-slate-300">
 
-            {/* Background Decoration */}
-            <div className="absolute -right-40 -top-40 h-96 w-96 rounded-full bg-emerald-400/10 blur-3xl" />
-            <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-teal-400/10 blur-3xl" />
+            {/* Background Decorations */}
+            <div className="pointer-events-none absolute -right-40 -top-40 -z-10 size-[450px] rounded-full bg-emerald-200/30 blur-[100px] dark:bg-emerald-500/10" />
+            <div className="pointer-events-none absolute -bottom-40 -left-40 -z-10 size-[400px] rounded-full bg-teal-200/30 blur-[100px] dark:bg-teal-500/10" />
 
-            <div className="relative mx-auto max-w-7xl px-5 pt-16 md:px-8 lg:pt-20">
+            <div className="mx-auto max-w-7xl px-5 pt-16 md:px-8 lg:pt-20">
 
                 {/* Main Footer Content */}
-                <div className="grid gap-12 border-b border-white/10 pb-14 sm:grid-cols-2 lg:grid-cols-5 lg:gap-10">
+                <div className="grid gap-12 border-b border-slate-200 pb-12 dark:border-slate-800 sm:grid-cols-2 lg:grid-cols-5 lg:gap-10 lg:pb-14">
 
                     {/* Brand Information */}
                     <div className="sm:col-span-2 lg:col-span-2">
-                        <Link href="/" className="group flex shrink-0 items-center gap-3">
-                            <span className="relative grid size-12 place-items-center rounded-2xl bg-white/10 text-emerald-300 ring-1 ring-white/15 transition-all duration-300 group-hover:bg-white/15 group-hover:-rotate-3">
+
+                        <Link href="/" className="group flex w-fit items-center gap-3">
+
+                            <span className="relative grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/20 transition-all duration-300 group-hover:-rotate-3 group-hover:scale-105">
                                 <HandHeart className="size-7" strokeWidth={2.1} />
-                                <span className="absolute -right-1 -top-1 size-3 rounded-full border-2 border-emerald-950 bg-amber-400" />
+
+                                <span className="absolute -right-1 -top-1 size-3 rounded-full border-2 border-slate-50 bg-amber-400 dark:border-[#0B1120]" />
                             </span>
 
                             <span className="flex flex-col leading-none">
-                                <span className="text-[1.65rem] font-extrabold tracking-[-0.055em] text-white">
+                                <span className="text-[1.65rem] font-extrabold tracking-[-0.055em] text-slate-900 dark:text-white">
                                     Togetherly
                                 </span>
 
-                                <span className="mt-2 text-[9px] font-bold tracking-[0.19em] text-emerald-100/60">
+                                <span className="mt-2 text-[9px] font-bold tracking-[0.19em] text-emerald-700 dark:text-emerald-400">
                                     SMALL ACTS. BIG IMPACT.
                                 </span>
                             </span>
                         </Link>
 
-                        <p className="mt-6 max-w-sm text-sm leading-7 text-emerald-100/70">
+                        <p className="mt-6 max-w-sm text-sm leading-7 text-slate-600 dark:text-slate-400">
                             Bringing people together through meaningful events,
                             shared interests, and stronger communities.
                             Discover, connect, and create something meaningful with Togetherly.
@@ -82,19 +84,26 @@ export default function Footer() {
 
                         {/* Contact Information */}
                         <div className="mt-7 space-y-4">
-                            <div className="flex items-center gap-3 text-sm text-emerald-100/80">
-                                <Mail size={17} className="text-emerald-300" />
+
+                            <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
+                                <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
+                                    <Mail size={17} />
+                                </span>
                                 hello@togetherly.com
                             </div>
 
-                            <div className="flex items-center gap-3 text-sm text-emerald-100/80">
-                                <MapPin size={17} className="text-emerald-300" />
+                            <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
+                                <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
+                                    <MapPin size={17} />
+                                </span>
                                 Dhaka, Bangladesh
                             </div>
+
                         </div>
 
                         {/* Social Links */}
                         <div className="mt-8 flex items-center gap-3">
+
                             {socialLinks.map((social) => {
                                 const Icon = social.icon;
 
@@ -103,105 +112,64 @@ export default function Footer() {
                                         key={social.label}
                                         href={social.href}
                                         aria-label={social.label}
-                                        className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-emerald-100 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300 hover:bg-emerald-500 hover:text-white"
+                                        className="flex size-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500 hover:bg-emerald-500 hover:text-white dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-300 dark:hover:border-emerald-500 dark:hover:bg-emerald-500 dark:hover:text-white"
                                     >
-                                        <Icon size={18} />
+                                        <Icon size={17} />
                                     </Link>
                                 );
                             })}
+
                         </div>
                     </div>
 
-                    {/* Platform Links */}
-                    <div>
-                        <h3 className="mb-6 text-base font-bold text-white">
-                            Platform
-                        </h3>
+                    {/* Reusable Footer Link Sections */}
+                    {Object.entries(footerLinks).map(([title, links]) => (
+                        <div key={title} className={title === "legal" ? "sm:col-span-2 lg:col-span-1" : ""}>
 
-                        <ul className="space-y-4">
-                            {footerLinks.platform.map((link) => (
-                                <li key={link.name}>
-                                    <Link
-                                        href={link.href}
-                                        className="group flex w-fit items-center gap-2 text-sm text-emerald-100/70 transition-colors hover:text-white"
-                                    >
-                                        {link.name}
-                                        <ArrowUpRight
-                                            size={14}
-                                            className="opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100"
-                                        />
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                            <h3 className="mb-6 text-base font-bold capitalize text-slate-900 dark:text-white">
+                                {title}
+                            </h3>
 
-                    {/* Resources Links */}
-                    <div>
-                        <h3 className="mb-6 text-base font-bold text-white">
-                            Resources
-                        </h3>
+                            <ul className="space-y-4">
 
-                        <ul className="space-y-4">
-                            {footerLinks.resources.map((link) => (
-                                <li key={link.name}>
-                                    <Link
-                                        href={link.href}
-                                        className="group flex w-fit items-center gap-2 text-sm text-emerald-100/70 transition-colors hover:text-white"
-                                    >
-                                        {link.name}
-                                        <ArrowUpRight
-                                            size={14}
-                                            className="opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100"
-                                        />
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                                {links.map((link) => (
+                                    <li key={link.name}>
+                                        <Link
+                                            href={link.href}
+                                            className="group flex w-fit items-center gap-2 text-sm text-slate-600 transition-colors duration-200 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-emerald-400"
+                                        >
+                                            {link.name}
 
-                    {/* Legal Links */}
-                    <div className="sm:col-span-2 lg:col-span-1">
-                        <h3 className="mb-6 text-base font-bold text-white">
-                            Legal
-                        </h3>
+                                            <ArrowUpRight
+                                                size={14}
+                                                className="opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100"
+                                            />
+                                        </Link>
+                                    </li>
+                                ))}
 
-                        <ul className="space-y-4">
-                            {footerLinks.legal.map((link) => (
-                                <li key={link.name}>
-                                    <Link
-                                        href={link.href}
-                                        className="group flex w-fit items-center gap-2 text-sm text-emerald-100/70 transition-colors hover:text-white"
-                                    >
-                                        {link.name}
-                                        <ArrowUpRight
-                                            size={14}
-                                            className="opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100"
-                                        />
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                            </ul>
+                        </div>
+                    ))}
 
                 </div>
 
                 {/* Bottom Footer */}
                 <div className="flex flex-col items-center justify-between gap-5 py-7 text-center sm:flex-row sm:text-left">
 
-                    <p className="text-sm text-emerald-100/60">
+                    <p className="text-sm text-slate-500 dark:text-slate-500">
                         © 2026 Togetherly. All rights reserved.
                     </p>
 
-                    <p className="flex items-center gap-1.5 text-sm text-emerald-100/60">
+                    <p className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-500">
                         Made with
-                        <Heart size={15} className="fill-rose-400 text-rose-400" />
+                        <Heart size={15} className="fill-rose-500 text-rose-500" />
                         for stronger communities.
                     </p>
 
                     <Link
                         href="/"
-                        className="text-sm font-medium text-emerald-200 transition-colors hover:text-white"
+                        className="text-sm font-semibold text-emerald-700 transition-colors hover:text-emerald-500 dark:text-emerald-400 dark:hover:text-emerald-300"
                     >
                         Back to top ↑
                     </Link>

@@ -11,6 +11,7 @@ import {
   LogOut,
   Moon,
   Sun,
+  UserRound,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -32,6 +33,7 @@ const accountLinks = [
   { label: "Create Event", href: "/create-event", icon: CalendarPlus },
   { label: "Manage Events", href: "/manage-events", icon: ClipboardList },
   { label: "Joined Events", href: "/joined-events", icon: CalendarCheck },
+  { label: "Profile", href: "/profile", icon: UserRound },
 ];
 
 function getInitials(name: string) {
