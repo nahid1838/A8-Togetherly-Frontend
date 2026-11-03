@@ -10,6 +10,7 @@ import {
   Users,
   BriefcaseBusiness,
 } from "lucide-react";
+import Link from "next/link";
 
 export const categories = [
   {
@@ -93,6 +94,7 @@ export default function EventCategories() {
             </p>
           </div>
 
+          <Link href={"/upcoming-events"}>
           <button className="group flex w-fit items-center gap-2 font-semibold text-emerald-700 transition-colors hover:text-emerald-800">
             Explore All Categories
             <ArrowRight
@@ -100,6 +102,7 @@ export default function EventCategories() {
               className="transition-transform group-hover:translate-x-1"
             />
           </button>
+          </Link>
         </div>
 
         {/* Category Cards */}

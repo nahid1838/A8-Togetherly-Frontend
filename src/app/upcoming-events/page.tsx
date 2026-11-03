@@ -1,7 +1,7 @@
 import { Metadata } from "next";
-import Link from "next/link";
-import { CalendarX, Sparkles } from "lucide-react";
-import EventCard from "@/components/events/EventCard";
+import { Suspense } from "react";
+import { Sparkles } from "lucide-react";
+import UpcomingEventsClient from "@/components/events/UpcomingEventsClient";
 import { TEvent } from "@/type/eventType";
 
 export const metadata: Metadata = {
@@ -10,11 +10,23 @@ export const metadata: Metadata = {
         "Browse upcoming events on Togetherly — discover meetups, workshops, concerts and community gatherings happening near you.",
 };
 
-const UpcomingEventsPage = async () => {
+// Dynamic (uncached) fetch → must live inside a <Suspense> boundary with
+// cacheComponents; the heading above it stays in the static shell.
+async function UpcomingEventsContent() {
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/upcoming-events`,
+        {
+            cache: "no-store",
+        }
+    );
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events`);
-    const events = await res.json();
+    const data = await res.json();
+    const events: TEvent[] = Array.isArray(data) ? data : [];
 
+    return <UpcomingEventsClient events={events} />;
+}
+
+const UpcomingEventsPage = () => {
     return (
         <section className="relative overflow-hidden bg-[#FAFAF9] px-5 py-16 md:px-8 lg:py-20">
             {/* Background Decorations */}
@@ -40,32 +52,21 @@ const UpcomingEventsPage = async () => {
                     </p>
                 </div>
 
-                {/* Events Grid / Empty State */}
-                {events.length > 0 ? (
-                    <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        {
-                            events.map((event: TEvent) => <EventCard key={event._id} event={event} />)
-                        }
-                    </div>
-                ) : (
-                    <div className="mt-12 rounded-2xl border border-dashed border-slate-200 bg-white px-6 py-16 text-center">
-                        <CalendarX className="mx-auto size-10 text-emerald-600" strokeWidth={1.6} />
-
-                        <h2 className="mt-4 text-xl font-bold text-slate-900">
-                            No upcoming events yet
-                        </h2>
-                        <p className="mt-2 text-sm leading-6 text-slate-500">
-                            Be the spark — create an event and bring people together.
-                        </p>
-
-                        <Link
-                            href="/create-event"
-                            className="mt-6 inline-flex rounded-full bg-emerald-600 px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-600/20 transition-colors hover:bg-emerald-700"
-                        >
-                            Create an Event
-                        </Link>
-                    </div>
-                )}
+                {/* Search, category filters, grid and empty states */}
+                <Suspense
+                    fallback={
+                        <div className="flex min-h-[40vh] items-center justify-center">
+                            <div className="text-center">
+                                <div className="mx-auto size-10 animate-spin rounded-full border-4 border-emerald-100 border-t-emerald-600" />
+                                <p className="mt-4 text-sm font-medium text-slate-500">
+                                    Loading events...
+                                </p>
+                            </div>
+                        </div>
+                    }
+                >
+                    <UpcomingEventsContent />
+                </Suspense>
 
             </div>
         </section>

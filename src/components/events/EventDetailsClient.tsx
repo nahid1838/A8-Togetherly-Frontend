@@ -34,7 +34,6 @@ const MONTHS = [
     "September", "October", "November", "December",
 ];
 
-/* Small circular avatar: image with an initials-gradient fallback. */
 function UserAvatar({
     src,
     name,
@@ -103,7 +102,6 @@ function EventDetailsClient({
     const handleJoin = async () => {
         if (isPending || isJoining) return;
 
-        // Not logged in → send to login instead of faking a join.
         if (!email) {
             router.push("/login");
             return;
@@ -165,11 +163,12 @@ function EventDetailsClient({
         }
     };
 
+    // Hover effects only on devices that support hover.
     const joinButtonClass = cn(
-        "h-12 w-full rounded-xl text-sm font-bold transition-all",
+        "h-12 w-full rounded-xl text-sm font-bold transition-colors",
         joined
-            ? "bg-slate-100 text-emerald-700 hover:bg-slate-200"
-            : "bg-emerald-600 text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700"
+            ? "bg-slate-100 text-emerald-700 [@media(hover:hover)]:hover:bg-slate-200"
+            : "bg-emerald-600 text-white shadow-lg shadow-emerald-600/20 [@media(hover:hover)]:hover:bg-emerald-700"
     );
 
     const joinButtonContent = isJoining ? (
@@ -190,15 +189,15 @@ function EventDetailsClient({
     );
 
     return (
-        <main className="min-h-screen bg-[#FAFAF9] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+        <main className="min-h-screen overflow-x-hidden bg-[#FAFAF9] px-3 py-6 sm:px-6 sm:py-10 lg:px-8 lg:py-14">
 
             <div className="mx-auto max-w-7xl">
 
                 {/* Back Navigation */}
-                <div className="mb-7 flex flex-wrap items-center justify-between gap-3 sm:gap-4">
+                <div className="mb-6 flex flex-wrap items-center justify-between gap-3 sm:mb-7">
                     <Link
                         href="/upcoming-events"
-                        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition-colors hover:text-emerald-600"
+                        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition-colors [@media(hover:hover)]:hover:text-emerald-600"
                     >
                         <ArrowLeft size={18} />
                         Back to Events
@@ -206,7 +205,7 @@ function EventDetailsClient({
 
                     <button
                         onClick={handleShare}
-                        className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-emerald-300 hover:text-emerald-600"
+                        className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition-colors [@media(hover:hover)]:hover:border-emerald-300 [@media(hover:hover)]:hover:text-emerald-600 sm:px-4 sm:text-sm"
                     >
                         <Share2 size={16} />
                         Share Event
@@ -214,9 +213,9 @@ function EventDetailsClient({
                 </div>
 
                 {/* Hero Section */}
-                <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+                <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm sm:rounded-3xl">
 
-                    <div className="relative flex min-h-[260px] flex-col justify-end overflow-hidden sm:min-h-[380px] lg:min-h-[480px]">
+                    <div className="relative flex min-h-[300px] flex-col justify-end overflow-hidden sm:min-h-[380px] lg:min-h-[480px]">
 
                         {!imageFailed && event.thumbnail ? (
                             // eslint-disable-next-line @next/next/no-img-element
@@ -228,32 +227,32 @@ function EventDetailsClient({
                             />
                         ) : (
                             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-emerald-500 to-emerald-800">
-                                <CategoryIcon size={80} className="text-white/70" />
+                                <CategoryIcon size={70} className="text-white/70 sm:size-20" />
                             </div>
                         )}
 
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
 
-                        <div className="relative w-full p-6 sm:p-10">
+                        <div className="relative w-full p-5 sm:p-10">
 
-                            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-4 py-2 text-xs font-bold text-white backdrop-blur-md">
+                            <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-3 py-1.5 text-xs font-bold text-white backdrop-blur-md sm:mb-4 sm:px-4 sm:py-2">
                                 <CategoryIcon size={15} />
                                 {event.eventType}
                             </span>
 
-                            <h1 className="max-w-4xl break-words text-3xl font-extrabold leading-tight text-white sm:text-4xl lg:text-5xl">
+                            <h1 className="max-w-4xl break-words text-2xl font-extrabold leading-tight text-white sm:text-4xl lg:text-5xl">
                                 {event.title}
                             </h1>
 
-                            <div className="mt-5 flex flex-wrap items-center gap-4 break-words text-sm font-medium text-white/90">
+                            <div className="mt-4 flex flex-col items-start gap-3 text-sm font-medium text-white/90 sm:mt-5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
 
                                 <span className="flex items-center gap-2">
-                                    <CalendarDays size={17} />
+                                    <CalendarDays size={17} className="shrink-0" />
                                     {formattedDate}
                                 </span>
 
-                                <span className="flex items-center gap-2">
-                                    <MapPin size={17} />
+                                <span className="flex items-start gap-2 break-words">
+                                    <MapPin size={17} className="mt-0.5 shrink-0" />
                                     {event.location}
                                 </span>
 
@@ -264,45 +263,33 @@ function EventDetailsClient({
                     {/* Event Summary */}
                     <div className="grid grid-cols-1 divide-y divide-slate-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
 
-                        <div className="flex items-center gap-4 p-5 sm:p-7">
-                            <div className="rounded-2xl bg-emerald-50 p-3 text-emerald-600">
+                        <div className="flex items-center gap-4 p-4 sm:p-6 lg:p-7">
+                            <div className="shrink-0 rounded-2xl bg-emerald-50 p-3 text-emerald-600">
                                 <CalendarCheck size={23} />
                             </div>
-                            <div>
-                                <p className="text-xs font-medium text-slate-400">
-                                    Event Date
-                                </p>
-                                <p className="mt-1 text-sm font-bold text-slate-800">
-                                    {formattedDate}
-                                </p>
+                            <div className="min-w-0">
+                                <p className="text-xs font-medium text-slate-400">Event Date</p>
+                                <p className="mt-1 text-sm font-bold text-slate-800">{formattedDate}</p>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-4 p-5 sm:p-7">
-                            <div className="rounded-2xl bg-orange-50 p-3 text-orange-500">
+                        <div className="flex items-center gap-4 p-4 sm:p-6 lg:p-7">
+                            <div className="shrink-0 rounded-2xl bg-orange-50 p-3 text-orange-500">
                                 <MapPin size={23} />
                             </div>
                             <div className="min-w-0">
-                                <p className="text-xs font-medium text-slate-400">
-                                    Location
-                                </p>
-                                <p className="mt-1 truncate text-sm font-bold text-slate-800">
-                                    {event.location}
-                                </p>
+                                <p className="text-xs font-medium text-slate-400">Location</p>
+                                <p className="mt-1 break-words text-sm font-bold text-slate-800">{event.location}</p>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-4 p-5 sm:p-7">
-                            <div className="rounded-2xl bg-blue-50 p-3 text-blue-500">
+                        <div className="flex items-center gap-4 p-4 sm:p-6 lg:p-7">
+                            <div className="shrink-0 rounded-2xl bg-blue-50 p-3 text-blue-500">
                                 <Ticket size={23} />
                             </div>
-                            <div>
-                                <p className="text-xs font-medium text-slate-400">
-                                    Event Category
-                                </p>
-                                <p className="mt-1 text-sm font-bold text-slate-800">
-                                    {event.eventType}
-                                </p>
+                            <div className="min-w-0">
+                                <p className="text-xs font-medium text-slate-400">Event Category</p>
+                                <p className="mt-1 break-words text-sm font-bold text-slate-800">{event.eventType}</p>
                             </div>
                         </div>
 
@@ -310,55 +297,46 @@ function EventDetailsClient({
                 </section>
 
                 {/* Main Content */}
-                <div className="mt-8 grid gap-8 lg:grid-cols-3">
+                <div className="mt-6 grid min-w-0 gap-6 sm:mt-8 sm:gap-8 lg:grid-cols-3">
 
                     {/* Left Content */}
-                    <div className="space-y-8 lg:col-span-2">
+                    <div className="min-w-0 space-y-6 sm:space-y-8 lg:col-span-2">
 
                         {/* About Event */}
-                        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+                        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:rounded-3xl sm:p-8">
 
-                            <div className="mb-6 flex items-center gap-3">
-                                <div className="rounded-xl bg-emerald-50 p-2.5 text-emerald-600">
+                            <div className="mb-5 flex items-center gap-3 sm:mb-6">
+                                <div className="shrink-0 rounded-xl bg-emerald-50 p-2.5 text-emerald-600">
                                     <Sparkles size={21} />
                                 </div>
 
-                                <div>
-                                    <h2 className="text-xl font-bold text-slate-900">
-                                        About This Event
-                                    </h2>
-                                    <p className="text-sm text-slate-400">
-                                        Everything you need to know
-                                    </p>
+                                <div className="min-w-0">
+                                    <h2 className="text-lg font-bold text-slate-900 sm:text-xl">About This Event</h2>
+                                    <p className="text-xs text-slate-400 sm:text-sm">Everything you need to know</p>
                                 </div>
                             </div>
 
-                            <p className="whitespace-pre-line break-words text-sm leading-8 text-slate-600 sm:text-base">
+                            <p className="whitespace-pre-line break-words text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
                                 {event.description}
                             </p>
 
                         </section>
 
                         {/* Who's Joined */}
-                        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+                        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:rounded-3xl sm:p-8">
 
-                            <div className="mb-6 flex items-center gap-3">
-                                <div className="rounded-xl bg-emerald-50 p-2.5 text-emerald-600">
+                            <div className="mb-6 flex flex-wrap items-center gap-3">
+                                <div className="shrink-0 rounded-xl bg-emerald-50 p-2.5 text-emerald-600">
                                     <UserRoundCheck size={21} />
                                 </div>
 
-                                <div>
-                                    <h2 className="text-xl font-bold text-slate-900">
-                                        Who&apos;s Joined
-                                    </h2>
-                                    <p className="text-sm text-slate-400">
-                                        People attending this event
-                                    </p>
+                                <div className="min-w-0">
+                                    <h2 className="text-lg font-bold text-slate-900 sm:text-xl">Who's Joined</h2>
+                                    <p className="text-xs text-slate-400 sm:text-sm">People attending this event</p>
                                 </div>
 
                                 <span className="ml-auto rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                                    {joins.length}{" "}
-                                    {joins.length === 1 ? "Person" : "People"}
+                                    {joins.length} {joins.length === 1 ? "Person" : "People"}
                                 </span>
                             </div>
 
@@ -366,14 +344,13 @@ function EventDetailsClient({
                                 <div className="flex flex-wrap gap-2.5">
                                     {joins.map((join) => {
                                         const isYou =
-                                            Boolean(email) &&
-                                            join.userEmail === email;
+                                            Boolean(email) && join.userEmail === email;
 
                                         return (
                                             <span
                                                 key={join.userEmail}
                                                 className={cn(
-                                                    "flex items-center gap-2 rounded-full border py-1 pl-1 pr-3 text-sm font-semibold",
+                                                    "flex max-w-full items-center gap-2 rounded-full border py-1 pl-1 pr-3 text-sm font-semibold",
                                                     isYou
                                                         ? "border-emerald-200 bg-emerald-50 text-emerald-700"
                                                         : "border-slate-100 bg-slate-50 text-slate-700"
@@ -387,10 +364,7 @@ function EventDetailsClient({
                                                 <span className="max-w-[150px] truncate">
                                                     {isYou
                                                         ? "You"
-                                                        : join.userName ||
-                                                          join.userEmail.split(
-                                                              "@"
-                                                          )[0]}
+                                                        : join.userName || join.userEmail.split("@")[0]}
                                                 </span>
                                             </span>
                                         );
@@ -398,67 +372,52 @@ function EventDetailsClient({
                                 </div>
                             ) : (
                                 <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-6 text-center text-sm text-slate-500">
-                                    No one has joined yet — open a spot by
-                                    being the first!
+                                    No one has joined yet — open a spot by being the first!
                                 </p>
                             )}
 
                         </section>
 
                         {/* Event Location */}
-                        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+                        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:rounded-3xl sm:p-8">
 
                             <div className="mb-5 flex items-center gap-3">
-                                <div className="rounded-xl bg-orange-50 p-2.5 text-orange-500">
+                                <div className="shrink-0 rounded-xl bg-orange-50 p-2.5 text-orange-500">
                                     <MapPin size={21} />
                                 </div>
 
                                 <div>
-                                    <h2 className="text-xl font-bold text-slate-900">
-                                        Event Location
-                                    </h2>
-                                    <p className="text-sm text-slate-400">
-                                        Where the event takes place
-                                    </p>
+                                    <h2 className="text-lg font-bold text-slate-900 sm:text-xl">Event Location</h2>
+                                    <p className="text-xs text-slate-400 sm:text-sm">Where the event takes place</p>
                                 </div>
                             </div>
 
-                            <div className="flex items-start gap-3 rounded-2xl bg-slate-50 p-5">
+                            <div className="flex items-start gap-3 rounded-2xl bg-slate-50 p-4 sm:p-5">
                                 <MapPin className="mt-1 shrink-0 text-emerald-600" size={20} />
-                                <div>
-                                    <p className="break-words font-bold text-slate-800">
-                                        {event.location}
-                                    </p>
-                                    <p className="mt-1 text-sm text-slate-500">
-                                        Event venue and meeting location
-                                    </p>
+                                <div className="min-w-0">
+                                    <p className="break-words font-bold text-slate-800">{event.location}</p>
+                                    <p className="mt-1 text-sm text-slate-500">Event venue and meeting location</p>
                                 </div>
                             </div>
 
                         </section>
 
                         {/* Organizer Information */}
-                        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+                        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:rounded-3xl sm:p-8">
 
                             <div className="mb-6 flex items-center gap-3">
-                                <div className="rounded-xl bg-blue-50 p-2.5 text-blue-600">
+                                <div className="shrink-0 rounded-xl bg-blue-50 p-2.5 text-blue-600">
                                     <Users size={21} />
                                 </div>
 
                                 <div>
-                                    <h2 className="text-xl font-bold text-slate-900">
-                                        Event Organizer
-                                    </h2>
-                                    <p className="text-sm text-slate-400">
-                                        Meet the person behind this event
-                                    </p>
+                                    <h2 className="text-lg font-bold text-slate-900 sm:text-xl">Event Organizer</h2>
+                                    <p className="text-xs text-slate-400 sm:text-sm">Meet the person behind this event</p>
                                 </div>
                             </div>
 
-                            <div className="flex flex-col gap-5 rounded-2xl border border-slate-100 bg-slate-50/70 p-5 sm:flex-row sm:items-center">
+                            <div className="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-slate-50/70 p-4 sm:flex-row sm:items-center sm:gap-5 sm:p-5">
 
-
-                                {/* Organizer Avatar */}
                                 <div className="size-20 shrink-0 overflow-hidden rounded-2xl border-4 border-white bg-emerald-100 shadow-sm">
                                     {event.userImageUrl ? (
                                         // eslint-disable-next-line @next/next/no-img-element
@@ -474,18 +433,14 @@ function EventDetailsClient({
                                     )}
                                 </div>
 
-                                {/* Organizer Details */}
                                 <div className="min-w-0 flex-1">
                                     <h3 className="break-words text-lg font-bold text-slate-900">
                                         {event.userName || "Anonymous"}
                                     </h3>
 
                                     {event.userEmail && (
-                                        <p className="mt-2 flex items-center gap-2 break-all text-sm text-slate-500">
-                                            <Mail
-                                                size={15}
-                                                className="shrink-0"
-                                            />
+                                        <p className="mt-2 flex items-start gap-2 break-all text-sm text-slate-500">
+                                            <Mail size={15} className="mt-0.5 shrink-0" />
                                             {event.userEmail}
                                         </p>
                                     )}
@@ -495,19 +450,18 @@ function EventDetailsClient({
                                     </p>
                                 </div>
 
-
                             </div>
                         </section>
 
                     </div>
 
                     {/* Right Sidebar */}
-                    <aside className="space-y-6">
+                    <aside className="min-w-0 space-y-6">
 
                         {/* Join Event Card */}
-                        <section className="lg:sticky lg:top-24 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+                        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm sm:rounded-3xl lg:sticky lg:top-24">
 
-                            <div className="relative overflow-hidden bg-gradient-to-br from-emerald-600 to-emerald-800 p-6 text-white">
+                            <div className="relative overflow-hidden bg-gradient-to-br from-emerald-600 to-emerald-800 p-5 text-white sm:p-6">
 
                                 <div className="absolute -right-10 -top-10 size-36 rounded-full bg-white/10 blur-2xl" />
 
@@ -517,8 +471,8 @@ function EventDetailsClient({
                                         Be Part of It
                                     </span>
 
-                                    <h2 className="mt-5 text-2xl font-extrabold">
-                                        Don&apos;t Miss Out!
+                                    <h2 className="mt-4 text-xl font-extrabold sm:mt-5 sm:text-2xl">
+                                        Don't Miss Out!
                                     </h2>
 
                                     <p className="mt-2 text-sm leading-6 text-emerald-50">
@@ -527,24 +481,21 @@ function EventDetailsClient({
                                 </div>
                             </div>
 
-                            <div className="p-6">
+                            <div className="p-5 sm:p-6">
 
                                 <div className="mb-5 flex items-center justify-between gap-4">
-                                    <div className="min-w-0 break-words">
-                                        <p className="text-xs text-slate-400">
-                                            Event Date
-                                        </p>
-                                        <p className="mt-1 font-bold text-slate-800">
+                                    <div className="min-w-0">
+                                        <p className="text-xs text-slate-400">Event Date</p>
+                                        <p className="mt-1 break-words text-sm font-bold text-slate-800 sm:text-base">
                                             {formattedDate}
                                         </p>
                                     </div>
 
-                                    <div className="rounded-xl bg-emerald-50 p-3 text-emerald-600">
+                                    <div className="shrink-0 rounded-xl bg-emerald-50 p-3 text-emerald-600">
                                         <CalendarDays size={22} />
                                     </div>
                                 </div>
 
-                                {/* Joined Count + Avatars */}
                                 {joins.length > 0 ? (
                                     <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
                                         <div className="flex -space-x-2.5">
@@ -565,11 +516,7 @@ function EventDetailsClient({
                                         </div>
 
                                         <p className="text-xs font-semibold text-slate-500">
-                                            {joins.length}{" "}
-                                            {joins.length === 1
-                                                ? "person"
-                                                : "people"}{" "}
-                                            joined
+                                            {joins.length} {joins.length === 1 ? "person" : "people"} joined
                                         </p>
                                     </div>
                                 ) : (
@@ -596,7 +543,7 @@ function EventDetailsClient({
                         </section>
 
                         {/* Quick Information */}
-                        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:rounded-3xl sm:p-6">
 
                             <h3 className="mb-5 font-bold text-slate-900">
                                 Event Information
@@ -605,60 +552,49 @@ function EventDetailsClient({
                             <div className="space-y-5">
 
                                 <div className="flex items-center gap-3">
-                                    <div className="rounded-xl bg-emerald-50 p-2.5 text-emerald-600">
+                                    <div className="shrink-0 rounded-xl bg-emerald-50 p-2.5 text-emerald-600">
                                         <CalendarDays size={18} />
                                     </div>
-                                    <div>
-                                        <p className="text-xs text-slate-400">
-                                            Date
-                                        </p>
-                                        <p className="text-sm font-semibold text-slate-800">
-                                            {formattedDate}
-                                        </p>
+                                    <div className="min-w-0">
+                                        <p className="text-xs text-slate-400">Date</p>
+                                        <p className="break-words text-sm font-semibold text-slate-800">{formattedDate}</p>
                                     </div>
                                 </div>
 
                                 <div className="flex items-center gap-3">
-                                    <div className="rounded-xl bg-orange-50 p-2.5 text-orange-500">
+                                    <div className="shrink-0 rounded-xl bg-orange-50 p-2.5 text-orange-500">
                                         <MapPin size={18} />
                                     </div>
                                     <div className="min-w-0">
-                                        <p className="text-xs text-slate-400">
-                                            Location
-                                        </p>
-                                        <p className="truncate text-sm font-semibold text-slate-800">
-                                            {event.location}
-                                        </p>
+                                        <p className="text-xs text-slate-400">Location</p>
+                                        <p className="break-words text-sm font-semibold text-slate-800">{event.location}</p>
                                     </div>
                                 </div>
 
                                 <div className="flex items-center gap-3">
-                                    <div className="rounded-xl bg-blue-50 p-2.5 text-blue-500">
+                                    <div className="shrink-0 rounded-xl bg-blue-50 p-2.5 text-blue-500">
                                         <UserRound size={18} />
                                     </div>
                                     <div className="min-w-0">
-                                        <p className="text-xs text-slate-400">
-                                            Organized By
-                                        </p>
-                                        <p className="truncate text-sm font-semibold text-slate-800">
+                                        <p className="text-xs text-slate-400">Organized By</p>
+                                        <p className="break-words text-sm font-semibold text-slate-800">
                                             {event?.userName || "Anonymous"}
                                         </p>
                                     </div>
                                 </div>
 
                             </div>
-
                         </section>
 
                     </aside>
                 </div>
 
                 {/* Bottom CTA */}
-                <section className="mt-10 overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-600 to-teal-700 px-6 py-10 text-center text-white sm:px-12">
+                <section className="mt-8 overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 px-5 py-8 text-center text-white sm:mt-10 sm:rounded-3xl sm:px-12 sm:py-10">
 
                     <Sparkles className="mx-auto mb-4" size={30} />
 
-                    <h2 className="text-2xl font-extrabold sm:text-3xl">
+                    <h2 className="text-xl font-extrabold sm:text-3xl">
                         Great Experiences Start With You!
                     </h2>
 
@@ -668,7 +604,7 @@ function EventDetailsClient({
 
                     <Link
                         href="/upcoming-events"
-                        className="mt-7 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-emerald-700 shadow-lg transition hover:bg-emerald-50"
+                        className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-emerald-700 shadow-lg transition-colors [@media(hover:hover)]:hover:bg-emerald-50 sm:mt-7"
                     >
                         Explore More Events
                         <ArrowRight size={17} />
@@ -678,9 +614,9 @@ function EventDetailsClient({
 
             </div>
 
-            {/* Mobile/tablet: sticky bottom join bar (sidebar card is only sticky on lg+) */}
+            {/* Mobile/tablet Sticky Join Bar */}
             <div
-                className="sticky bottom-0 z-40 mt-8 border-t border-slate-200 bg-white/95 px-4 pt-3 shadow-[0_-8px_30px_rgba(15,23,42,0.08)] backdrop-blur-md lg:hidden"
+                className="sticky bottom-0 z-40 mt-8 border-t border-slate-200 bg-white/95 px-3 pt-3 shadow-[0_-8px_30px_rgba(15,23,42,0.08)] backdrop-blur-md lg:hidden"
                 style={{
                     paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))",
                 }}
@@ -693,6 +629,7 @@ function EventDetailsClient({
                     {joinButtonContent}
                 </Button>
             </div>
+
         </main>
     );
 }

@@ -6,6 +6,7 @@ import {
   ArrowRight,
   Sparkles,
 } from "lucide-react";
+import Link from "next/link";
 
 const steps = [
   {
@@ -111,10 +112,12 @@ export default function HowItWorks() {
             Ready to be part of something meaningful?
           </p>
 
+          <Link href={"/create-event"}>
           <button className="inline-flex items-center gap-2 rounded-xl bg-[#059669] px-7 py-3.5 font-semibold text-white shadow-lg shadow-emerald-600/20 transition-all hover:-translate-y-1 hover:bg-[#047857]">
             Get Started
             <ArrowRight size={18} />
           </button>
+          </Link>
         </div>
 
       </div>

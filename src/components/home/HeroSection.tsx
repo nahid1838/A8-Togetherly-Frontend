@@ -7,6 +7,7 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -39,6 +40,7 @@ export default function HeroSection() {
 
           {/* CTA Buttons */}
           <div className="mt-9 flex flex-wrap items-center gap-4">
+            <Link href={"/upcoming-events"}>
             <Button
               size="lg"
               className="h-12 rounded-xl bg-[#059669] px-7 text-white shadow-lg shadow-emerald-600/20 hover:bg-[#047857]"
@@ -46,7 +48,9 @@ export default function HeroSection() {
               Explore Events
               <ArrowRight size={18} />
             </Button>
+            </Link>
 
+            <Link href={"create-event"}>
             <Button
               size="lg"
               variant="outline"
@@ -54,6 +58,7 @@ export default function HeroSection() {
             >
               Create an Event
             </Button>
+            </Link>
           </div>
 
           {/* Social Proof */}

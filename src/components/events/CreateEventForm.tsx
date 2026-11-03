@@ -28,6 +28,7 @@ import { cn } from "cn";
 import { categories } from "@/components/home/EventCategories";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const DESCRIPTION_MAX_LENGTH = 500;
 
@@ -57,11 +58,6 @@ export default function CreateEventForm() {
   // Get logged-in user
   const { data: session } = authClient.useSession();
 
-  const user = {
-    name: session?.user.name,
-    imageUrl: session?.user.image,
-    email: session?.user.email,
-  };
 
   useEffect(() => {
     if (dateInputRef.current) {
@@ -78,11 +74,6 @@ export default function CreateEventForm() {
   ) => {
     e.preventDefault();
 
-    // Check user authentication
-    if (!user) {
-      router.push("/login");
-      return;
-    }
 
     const formData = new FormData(e.currentTarget);
 
@@ -127,13 +118,12 @@ export default function CreateEventForm() {
         return;
       }
 
-      console.log("Event created successfully:", data);
-
       router.push("/upcoming-events");
       router.refresh();
+      toast.success("Event created successfully")
 
     } catch (error) {
-      console.error("Something went wrong:", error);
+      toast.error(`${error}`);
     }
   };
 

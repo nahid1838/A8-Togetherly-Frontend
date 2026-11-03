@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import {
   CalendarCheck,
   CalendarPlus,
@@ -64,6 +64,7 @@ export default function Navbar() {
     } finally {
       setLoggingOut(false);
     }
+    redirect("/login")
   };
 
   return (
