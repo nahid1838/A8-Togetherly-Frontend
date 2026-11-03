@@ -136,7 +136,7 @@ export default function CommunityImpact() {
             </span>
           </h2>
 
-          <p className="max-w-md text-base leading-7 text-muted-foreground sm:text-lg">
+          <p className="max-w-md text-base leading-7 text-muted-foreground dark:text-gray-300 sm:text-lg">
             Every event and every new connection adds to something bigger.
             Here is what our community has built together.
           </p>

@@ -53,6 +53,7 @@ export default function CreateEventForm() {
   const [description, setDescription] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [thumbnailError, setThumbnailError] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState("");
 
   const router = useRouter();
 
@@ -99,7 +100,7 @@ export default function CreateEventForm() {
       console.log("Please select a valid future date");
       return;
     }
-    
+
     const token = await getTokenFromClient();
 
     try {
@@ -370,6 +371,9 @@ export default function CreateEventForm() {
                     value={thumbnail}
                     onChange={(event) => {
                       setThumbnail(event.target.value);
+                    }}
+                    onBlur={() => {
+                      setPreviewUrl(thumbnail.trim());
                       setThumbnailError(false);
                     }}
                     className="h-11 rounded-xl border-slate-200 bg-slate-50/60 pl-11 text-sm focus-visible:border-emerald-600 focus-visible:ring-emerald-600/20"
@@ -377,11 +381,11 @@ export default function CreateEventForm() {
                 </div>
 
                 {/* Live Preview */}
-                {thumbnail && !thumbnailError && (
+                {previewUrl && !thumbnailError && (
                   <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={thumbnail}
+                      src={previewUrl}
                       alt="Event thumbnail preview"
                       onError={() => setThumbnailError(true)}
                       className="h-36 w-full object-cover"

@@ -46,7 +46,7 @@ const UpcomingEventsPage = () => {
                         Upcoming <span className="text-emerald-600">Events</span>
                     </h1>
 
-                    <p className="mt-4 max-w-xl leading-7 text-slate-500">
+                    <p className="mt-4 max-w-xl leading-7 text-gray-700 dark:text-gray-100">
                         Find your next experience — from tech meetups and
                         workshops to concerts and community gatherings.
                     </p>

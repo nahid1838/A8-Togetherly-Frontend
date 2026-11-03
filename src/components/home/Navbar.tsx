@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { redirect, usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   CalendarCheck,
   CalendarPlus,
@@ -51,6 +51,7 @@ export default function Navbar() {
   const user = session?.user ?? null;
   const [loggingOut, setLoggingOut] = useState(false);
 
+  const router = useRouter();
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
 
@@ -66,19 +67,22 @@ export default function Navbar() {
     } finally {
       setLoggingOut(false);
     }
-    redirect("/login")
+    // FIX: redirect() is for render/server code. In an event handler use the router.
+    router.push("/login");
+    router.refresh();
   };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-emerald-950/10 bg-white/95 shadow-[0_4px_24px_-18px_rgba(15,23,42,0.25)] backdrop-blur-xl">
-      <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6 lg:px-8">
-        <Link href="/" className="group flex shrink-0 items-center gap-2.5">
-          <span className="relative grid size-10 place-items-center rounded-[17px] bg-emerald-600 text-white shadow-lg shadow-emerald-600/20 transition-transform duration-300 group-hover:-rotate-3 sm:size-11">
-            <HandHeart className="size-6" strokeWidth={2.1} />
+      <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-2 px-3 min-[380px]:px-4 sm:gap-4 sm:px-6 lg:px-8">
+        {/* FIX: min-w-0 (not shrink-0) so the logo can shrink on very small screens */}
+        <Link href="/" className="group flex min-w-0 items-center gap-2 sm:gap-2.5">
+          <span className="relative grid size-9 shrink-0 place-items-center rounded-[15px] bg-emerald-600 text-white shadow-lg shadow-emerald-600/20 transition-transform duration-300 group-hover:-rotate-3 min-[380px]:size-10 sm:size-11 sm:rounded-[17px]">
+            <HandHeart className="size-5 min-[380px]:size-6" strokeWidth={2.1} />
             <span className="absolute -right-1 -top-1 size-3 rounded-full border-2 border-white bg-amber-400" />
           </span>
-          <span className="flex flex-col leading-none">
-            <span className="text-[1.3rem] font-extrabold tracking-[-0.055em] text-slate-900 sm:text-[1.45rem]">
+          <span className="flex min-w-0 flex-col leading-none">
+            <span className="truncate text-[1.1rem] font-extrabold tracking-[-0.055em] text-slate-900 min-[380px]:text-[1.3rem] sm:text-[1.45rem]">
               Togetherly<span className="text-emerald-600">.</span>
             </span>
             <span className="mt-1.5 hidden text-[9px] font-bold tracking-[0.19em] text-slate-500 sm:block">
@@ -129,7 +133,7 @@ export default function Navbar() {
             /* Session still loading — placeholder avoids a Login → Avatar flash */
             <span
               aria-hidden="true"
-              className="block size-10 animate-pulse rounded-full bg-slate-100 ring-1 ring-slate-200 lg:size-11"
+              className="block size-9 animate-pulse rounded-full bg-slate-100 ring-1 ring-slate-200 sm:size-10 lg:size-11"
             />
           ) : user ? (
             <>
@@ -140,7 +144,7 @@ export default function Navbar() {
                     aria-label={`Account menu for ${user.name}`}
                     className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-emerald-600/40"
                   >
-                    <Avatar className="size-10 border-2 border-white shadow-md ring-1 ring-emerald-600/30 transition-all group-hover:ring-emerald-600">
+                    <Avatar className="size-9 border-2 border-white shadow-md ring-1 ring-emerald-600/30 transition-all group-hover:ring-emerald-600 sm:size-10">
                       {user.image ? (
                         <AvatarImage
                           src={user.image}
@@ -153,10 +157,11 @@ export default function Navbar() {
                     </Avatar>
                   </DropdownMenuTrigger>
 
+                  {/* FIX: max-w keeps the dropdown inside the screen on tiny devices */}
                   <DropdownMenuContent
                     align="end"
                     sideOffset={12}
-                    className="w-64 rounded-2xl border border-slate-100 bg-white p-2 shadow-2xl shadow-emerald-950/10"
+                    className="w-64 max-w-[calc(100vw-1.5rem)] rounded-2xl border border-slate-100 bg-white p-2 shadow-2xl shadow-emerald-950/10"
                   >
                     {/* Identity header — also surfaces the name on touch devices */}
                     <div className="flex items-center gap-3 rounded-xl bg-gradient-to-br from-[#047857] to-[#059669] p-3 text-white">
@@ -212,14 +217,20 @@ export default function Navbar() {
                   </DropdownMenuContent>
                 </DropdownMenu>
 
-                {/* Tooltip: visible only when hovering the avatar (hover-capable devices) */}
+                {/*
+                  Tooltip: visible only when hovering the avatar (hover-capable devices).
+                  FIX (main cause of the right-side blank space): it used to be centered
+                  under the avatar (left-1/2 -translate-x-1/2). The avatar sits at the far
+                  right edge, so a long name stuck out past the screen, and even with
+                  opacity-0 it still made the page scroll sideways.
+                  Now it is anchored to the avatar's RIGHT edge and grows to the left.
+                */}
                 <span
                   role="tooltip"
                   aria-hidden="true"
-                  className="pointer-events-none absolute top-full left-1/2 z-10 mt-2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white opacity-0 shadow-xl transition-opacity duration-200 group-hover:opacity-100 [@media(hover:hover)]:block"
+                  className="pointer-events-none absolute right-0 top-full z-10 mt-2 hidden max-w-[min(14rem,70vw)] truncate rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white opacity-0 shadow-xl transition-opacity duration-200 group-hover:opacity-100 [@media(hover:hover)]:block"
                 >
                   {user.name}
-                  <span className="absolute -top-1 left-1/2 size-2 -translate-x-1/2 rotate-45 bg-slate-900" />
                 </span>
               </div>
 
@@ -244,7 +255,7 @@ export default function Navbar() {
             <Button
               render={<Link href="/login" />}
               nativeButton={false}
-              className="h-10 rounded-full bg-emerald-600 px-3.5 text-sm font-semibold text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 sm:px-4 lg:h-11 lg:px-5"
+              className="h-9 rounded-full bg-emerald-600 px-3 text-sm font-semibold text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 sm:h-10 sm:px-4 lg:h-11 lg:px-5"
             >
               Login
             </Button>
@@ -255,7 +266,7 @@ export default function Navbar() {
       <div className="border-t border-slate-100 lg:hidden">
         <nav
           aria-label="Mobile navigation"
-          className="mx-auto flex max-w-7xl items-center gap-1 overflow-x-auto px-4 py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-6"
+          className="mx-auto flex max-w-7xl items-center gap-1 overflow-x-auto px-3 py-1 [scrollbar-width:none] min-[380px]:px-4 sm:px-6 [&::-webkit-scrollbar]:hidden"
         >
           {navigation.map((item) => (
             <Link

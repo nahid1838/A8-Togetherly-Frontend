@@ -145,9 +145,8 @@ function EventCard({ event }: { event: TEvent }) {
         <Button
           render={<Link href={`/upcoming-events/${event._id}`} />}
           nativeButton={false}
-          variant="outline"
           size="sm"
-          className="h-10 w-full rounded-xl border-emerald-200 bg-emerald-50 text-sm font-semibold text-emerald-700 transition-colors hover:border-emerald-600 hover:bg-emerald-600 hover:text-white"
+          className="h-10 w-full rounded-xl border border-emerald-600 bg-emerald-600 text-sm font-semibold text-white transition-colors hover:border-emerald-700 hover:bg-emerald-700 hover:text-white dark:border-emerald-500 dark:bg-emerald-600 dark:text-white dark:hover:border-emerald-400 dark:hover:bg-emerald-500"
         >
           View Event
           <ArrowRight

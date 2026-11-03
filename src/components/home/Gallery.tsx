@@ -57,7 +57,7 @@ const Gallery = () => {
                         </span>
                     </h2>
 
-                    <p className="mt-4 max-w-2xl text-base leading-7 text-gray-600 sm:text-lg">
+                    <p className="mt-4 max-w-2xl text-base leading-7 text-gray-600 dark:text-gray-300 sm:text-lg">
                         Every smile tells a story. Explore the beautiful
                         moments created by people coming together to make
                         their communities better.

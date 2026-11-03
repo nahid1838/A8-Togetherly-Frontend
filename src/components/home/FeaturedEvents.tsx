@@ -33,7 +33,7 @@ const FeaturedEvents = async () => {
                             </span>
                         </h2>
 
-                        <p className="mt-4 max-w-xl text-base leading-7 text-gray-600 sm:text-lg">
+                        <p className="mt-4 max-w-xl text-base leading-7 text-gray-600 dark:text-gray-300 sm:text-lg">
                             Find meaningful events happening around you.
                             Connect with people, share experiences, and make
                             a positive impact together.

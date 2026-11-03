@@ -116,7 +116,7 @@ export default function EventCategories() {
               </span>
             </h2>
 
-            <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
+            <p className="mt-5 max-w-xl text-base leading-7 dark:text-gray-300 text-muted-foreground sm:text-lg">
               Find your passion, connect with like-minded people, and explore
               experiences that bring communities together.
             </p>
@@ -125,7 +125,7 @@ export default function EventCategories() {
           {/* Link styled directly (no <button> inside <a>) */}
           <Link
             href="/upcoming-events"
-            className="group inline-flex w-fit shrink-0 items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition-all duration-300 hover:border-emerald-500/40 hover:bg-emerald-600 hover:text-white hover:shadow-lg hover:shadow-emerald-900/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+            className="group inline-flex w-fit shrink-0 items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition-all duration-300 hover:border-emerald-500/40 hover:bg-emerald-600 hover:text-white hover:shadow-lg hover:shadow-emerald-900/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:text-gray-700 dark:bg-emerald-200"
           >
             Explore All Categories
             <ArrowRight
