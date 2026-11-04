@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
 import { useTheme } from "@/components/ThemeProvider";
+import { toast } from "sonner";
 
 const navigation = [
   { label: "Home", href: "/" },
@@ -62,6 +63,7 @@ export default function Navbar() {
   const handleLogout = async () => {
     if (loggingOut) return;
     setLoggingOut(true);
+    toast.success("User logout successfully!")
     try {
       await authClient.signOut();
     } finally {

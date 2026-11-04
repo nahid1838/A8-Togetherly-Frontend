@@ -54,27 +54,31 @@ export default function RegisterForm() {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const user = Object.fromEntries(formData.entries()) as {name: string, email: string, imageUrl: string, password: string};
+    const user = Object.fromEntries(formData.entries()) as { name: string, email: string, imageUrl: string, password: string };
 
-    const {data, error} = await authClient.signUp.email({
+    const { data, error } = await authClient.signUp.email({
       ...user,
     })
 
-    if(data) {
+    if (data) {
       toast.success("User created successfully")
       redirect("/")
     }
 
-    if(error) {
+    if (error) {
       toast.error(`${error.message}`)
     }
   }
 
   const handleGoogleSignIn = async () => {
-      const data = await authClient.signIn.social({
-        provider: "google"
-      })
+    const data = await authClient.signIn.social({
+      provider: "google"
+    })
+
+    if (data) {
+      toast.success("User logedin successfully")
     }
+  }
 
   return (
     <section className="relative overflow-hidden bg-[#FAFAF9] px-5 py-16 md:px-8 lg:py-24">

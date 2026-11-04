@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Togetherly – Small Acts. Big Impact.
 
-## Getting Started
+**Live Website:** https://togetherly-frontend.vercel.app/
 
-First, run the development server:
+Togetherly is a community-driven social events platform that brings people together to participate in meaningful activities, support local communities, and make a positive impact.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **User Authentication:** Secure user registration and login.
+- **Create Events:** Authenticated users can create and publish community events.
+- **Explore Events:** Browse upcoming social events and discover new opportunities.
+- **Join Events:** Users can join events and connect with other participants.
+- **Manage Events:** Event creators can view, edit, and delete their events.
+- **User Profiles:** Users can update their profile name and profile image.
+- **Responsive Design:** Enjoy a smooth experience across desktop, tablet, and mobile devices.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Technology usages
 
-## Learn More
+##      Frontend
+- **Next JS (App Router)
+- **ChadCn UI
+- **TypeScript
 
-To learn more about Next.js, take a look at the following resources:
+##      Authentication & Authorization
+- **BetterAuth
+- **MongoDB Adapter
+- **JWT
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+##      Backend
+- **ExpressJS
+- **MongoDB
+- **JavaScript
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+### Project Purpose
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Togetherly encourages people to make a difference through small acts of kindness, community participation, and meaningful connections.
